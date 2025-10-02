@@ -1,4 +1,6 @@
-Project Structure
+# Project Structure
+
+```bash
 offset/
 │
 ├─ app/
@@ -12,25 +14,12 @@ offset/
 ├─ sample-registry.json # Sample data for for the database
 ├─ seed_records.py      # Script to POST sample-registry to API
 └─ README.md
+```
 
-Database Structure:
+# Database Structure:
 Considering two tables 
 1. Master Credit Table (credit once created, never updated/deleted)
 2. Events Table (to track all the updates to all credits (sold/retired), along with details like timestamps, etc)
-
-DATABASE SETUP:-
-```sql
-CREATE USER carbon_user WITH PASSWORD 'carbon123';
-GRANT CONNECT ON DATABASE carbon_db TO carbon_user;
-\c carbon_db
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE records TO carbon_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE events TO carbon_user;
-GRANT USAGE, SELECT, UPDATE ON SEQUENCE events_event_id_seq TO carbon_user;
-```
-
-update "DATABASE_URL" to (via terminal)
-
-export DATABASE_URL="postgresql://carbon_user:carbon123@localhost/carbon_db"
 
 
 Reflection Questions
