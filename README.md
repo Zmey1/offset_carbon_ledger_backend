@@ -16,6 +16,67 @@ offset/
 └─ README.md
 ```
 
+# Datasbase Setup
+
+``` sql
+CREATE TABLE records (
+    id VARCHAR(64) PRIMARY KEY,
+    project_name TEXT NOT NULL,
+    registry TEXT NOT NULL,
+    vintage INT NOT NULL,
+    quantity INT NOT NULL,
+    serial_number TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE events (
+    event_id SERIAL PRIMARY KEY,
+    record_id VARCHAR(64) REFERENCES records(id),
+    event_type TEXT NOT NULL,
+    details JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+
+CREATE USER carbon_user WITH PASSWORD 'carbon123';
+GRANT CONNECT ON DATABASE carbon_db TO carbon_user;
+\c carbon_db
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE records TO carbon_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE events TO carbon_user;
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE events_event_id_seq TO carbon_user;
+ALTER TABLE records OWNER TO carbon_user;
+ALTER TABLE events OWNER TO carbon_user;
+ALTER SEQUENCE events_event_id_seq OWNER TO carbon_user;
+```
+
+# Setup Instructions:-
+
+1. 
+
+```bash
+export DATABASE_URL="postgresql://carbon_user:carbon123@localhost/carbon_db"
+```
+2. Run the API
+
+``` bash
+uvicorn app.main:app --reload
+```
+
+3. Go To FastAPI Docs:
+    http://127.0.0.1:8000/docs
+
+OR
+
+3. Go To Terminal 
+``` python
+
+python seed_records.py
+
+```
+
+To insert all sample records from sample-registry.json
+
+
 # Database Structure:
 
 1. Master Credit Table (credit once created, never updated/deleted)
