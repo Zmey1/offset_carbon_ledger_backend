@@ -17,12 +17,12 @@ offset/
 ```
 
 # Database Structure:
-Considering two tables 
+
 1. Master Credit Table (credit once created, never updated/deleted)
 2. Events Table (to track all the updates to all credits (sold/retired), along with details like timestamps, etc)
 
 
-Reflection Questions
+# Reflection Questions
 
 1. How did you design the ID so it’s always the same for the same input?
 -> Built a deterministic ID function that combines key fields like project_name,registry, vintage, quantity to a single normalized string hashed with SHA-256.
